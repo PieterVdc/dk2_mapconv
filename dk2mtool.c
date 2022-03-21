@@ -20,6 +20,13 @@
 #include <string.h>
 
 #include "dk2mfile.h"
+#include "dk2mfile.h"
+#include "lbfileio.h"
+
+
+#define ERR_NONE                0x00
+
+
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +47,7 @@ int main(int argc, char *argv[])
   struct DK2_Level *lvl;
   short flags = DK2MFLAG_VERBOSE;
   char *map_name=argv[1];
-  char operatn=tolower(argv[2][0]);
+  char operatn=argv[2][0];
   short result;
   result=dk2m_lvl_create(&lvl,flags);
   if (result!=ERR_NONE)

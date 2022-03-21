@@ -77,7 +77,7 @@ inline long read_int32_le_file (FILE *fp)
 /**
  * Reads 4-byte little-endian number from given buffer.
  */
-inline long read_int32_le_buf (const unsigned char *buff)
+long read_int32_le_buf (const unsigned char *buff)
 {
     long l;
     l = buff[0];
@@ -90,7 +90,7 @@ inline long read_int32_le_buf (const unsigned char *buff)
 /**
  * Reads 2-byte little-endian number from given buffer.
  */
-inline unsigned short read_int16_le_buf (const unsigned char *buff)
+unsigned short read_int16_le_buf (const unsigned char *buff)
 {
     long l;
     l = buff[0];
@@ -219,7 +219,7 @@ inline long file_length_opened (FILE *fp)
  * Reads 1-byte number from given buffer.
  * Simple wrapper for use with both little and big endian files.
  */
-inline unsigned char read_int8_buf (const unsigned char *buff)
+unsigned char read_int8_buf (const unsigned char *buff)
 {
     return buff[0];
 }

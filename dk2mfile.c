@@ -23,6 +23,8 @@
 #include <stdarg.h>
 #include "lbfileio.h"
 
+#include "../ADiKtEd/libadikted/adikted.h"
+
 typedef short (*dk2m_read_chunk)(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags);
 
 const char lvflg_alwaysimprisn_longtext[]="Always imprison enemies";
@@ -217,7 +219,7 @@ short dk2m_wtos(char *dst,const short *src)
  * @param pathname The source filename, possibly with path.
  * @return Pointer to the name in pathname string, with path skipped.
  */
-char *filename_from_path(const char *pathname)
+char *filename_from_path2(const char *pathname)
 {
     const char *fname = NULL;
     if (pathname)
@@ -292,6 +294,150 @@ char dk2_slab2char(unsigned short slab)
        return 'A'+slab;
   else
        return slab;
+}
+
+char dk2_slab2DK1Slab(unsigned short slab)
+{
+
+  
+/*
+#define SLAB_TYPE_ROCK         0x00
+#define SLAB_TYPE_GOLD         0x01
+#define SLAB_TYPE_EARTH        0x02
+#define SLAB_TYPE_TORCHDIRT    0x03
+#define SLAB_TYPE_WALLDRAPE    0x04
+#define SLAB_TYPE_WALLTORCH    0x05
+#define SLAB_TYPE_WALLWTWINS   0x06
+#define SLAB_TYPE_WALLWWOMAN   0x07
+#define SLAB_TYPE_WALLPAIRSHR  0x08
+#define SLAB_TYPE_PATH         0x0a
+#define SLAB_TYPE_CLAIMED      0x0b
+#define SLAB_TYPE_LAVA         0x0c
+#define SLAB_TYPE_WATER        0x0d
+#define SLAB_TYPE_PORTAL       0x0e
+#define SLAB_TYPE_TREASURE     0x10
+#define SLAB_TYPE_LIBRARY      0x12
+#define SLAB_TYPE_PRISONCASE   0x14
+#define SLAB_TYPE_TORTURE      0x16
+#define SLAB_TYPE_TRAINING     0x18
+#define SLAB_TYPE_DUNGHEART    0x1a
+#define SLAB_TYPE_WORKSHOP     0x1c
+#define SLAB_TYPE_SCAVENGER    0x1e
+#define SLAB_TYPE_TEMPLE       0x20
+#define SLAB_TYPE_GRAVEYARD    0x22
+#define SLAB_TYPE_HATCHERY     0x24
+#define SLAB_TYPE_LAIR         0x26
+#define SLAB_TYPE_BARRACKS     0x28
+#define SLAB_TYPE_DOORWOOD1    0x2a
+#define SLAB_TYPE_DOORWOOD2    0x2b
+#define SLAB_TYPE_DOORBRACE1   0x2c
+#define SLAB_TYPE_DOORBRACE2   0x2d
+#define SLAB_TYPE_DOORIRON1    0x2e
+#define SLAB_TYPE_DOORIRON2    0x2f
+#define SLAB_TYPE_DOORMAGIC1   0x30
+#define SLAB_TYPE_DOORMAGIC2   0x31
+#define SLAB_TYPE_BRIDGE       0x33
+#define SLAB_TYPE_GEMS         0x34
+#define SLAB_TYPE_GUARDPOST    0x35
+*/
+
+
+#define SLAB_TYPE_PURPLE_PATH 0x36
+switch (slab)
+{
+case 30:
+case 1:
+  return SLAB_TYPE_ROCK;
+  break;
+case 6:
+  return SLAB_TYPE_GOLD;
+  break;
+case 2:
+  return SLAB_TYPE_EARTH;
+  break;
+case 9:
+  return SLAB_TYPE_WALLDRAPE;
+  break;
+case 3:
+  return SLAB_TYPE_PATH;
+  break;
+case 8:
+  return SLAB_TYPE_CLAIMED;
+  break;
+case 4:
+  return SLAB_TYPE_LAVA;
+  break;
+case 5:
+  return SLAB_TYPE_WATER;
+  break;
+case 12:
+  return SLAB_TYPE_PORTAL;
+  break;
+case 10:
+  return SLAB_TYPE_TREASURE;
+  break;
+case 15:
+  return SLAB_TYPE_LIBRARY;
+  break;
+case 20:
+  return SLAB_TYPE_PRISONCASE;
+  break;
+case 21:
+  return SLAB_TYPE_TORTURE;
+  break;
+case 16:
+  return SLAB_TYPE_TRAINING;
+  break;
+case 14:
+  return SLAB_TYPE_DUNGHEART;
+  break;
+case 19:
+  return SLAB_TYPE_WORKSHOP;
+  break;
+case 22:
+  return SLAB_TYPE_TEMPLE;
+  break;
+case 23:
+  return SLAB_TYPE_GRAVEYARD;
+  break;
+case 17://wood bridge
+case 26://stone bridge
+  return SLAB_TYPE_BRIDGE;
+  break;
+case 7:
+  return SLAB_TYPE_GEMS;
+  break;
+case 18:
+  return SLAB_TYPE_GUARDPOST;
+  break;
+  /*  TODO figure out dk2 number for lair and hatchery as they can't be placed in editor
+case 'O':
+  return SLAB_TYPE_HATCHERY;
+  break;
+case 'O':
+  return SLAB_TYPE_LAIR;
+  break;
+*/
+
+case 24://casino
+case 25://arena
+case 35://hero lair
+case 28://hero gate loose
+case 33://hero gate 2*2
+case 37://hero gate 1*3
+case 40://hero gate 3*3
+default:
+  return SLAB_TYPE_PURPLE_PATH;
+  break;
+}
+
+
+
+
+
+
+
+
 }
 
 /*
@@ -672,23 +818,135 @@ short dk2m_print_lvlkwd(const struct DK2_Level *lvl)
 /*
  * Prints the level information normally stored in MAP file.
  */
-short dk2m_print_lvlmap(const struct DK2_Level *lvl)
+short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
 {
-  printf("DK2_LvlTiles, %dx%d\n",lvl->width,lvl->height);
-  int i,k;
-  for (k=0;k<lvl->height;k++)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  struct LEVEL *lvl;
+  short result;
+
+  // create object for storing map
+  level_init(&lvl,MFV_DKGOLD,NULL);
+
+  // Initialize the message displaying and storing
+  // (we won't use them in this example,
+  // but still they have to be initialized)
+  init_messages();
+
+  printf("\nexample1: how to put gems on map\n\n");
+
+  // Setting file name of the map to load
+  format_lvl_fname(lvl,"Levels/MAP00001");
+
+  printf("loading map file\n");
+
+  // Loading map
+  result=user_load_map(lvl,0);
+  if (result!=ERR_NONE)
+  {
+    printf("cannot load map\n");
+    printf("example1 finished with error\n");
+    system("pause");	
+
+    // The following two commands should be used to free memory
+    // allocated for level
+    level_free(lvl);
+    level_deinit(&lvl);
+
+    // This command should be always last function used from library
+    free_messages();
+    return 1;
+  }
+
+  // Making modifications
+  printf("changing slab\n");
+
+
+
+
+
+  printf("DK2_LvlTiles, %dx%d\n",lvlDk2->width,lvlDk2->height);
+  int tile_y,tile_x;
+  for (tile_x=0;tile_x<lvlDk2->height;tile_x++)
   {
     printf(" ");
-    for (i=0;i<lvl->width;i++)
+    for (tile_y=0;tile_y<lvlDk2->width;tile_y++)
     {
         struct DK2_LvlTile *tile;
-        tile=&(lvl->tiles[k][i]);
-        printf("%c",dk2_slab2char(tile->slab));
+        tile=&(lvlDk2->tiles[tile_x][tile_y]);
+        user_set_slab(lvl,tile_y,tile_x,dk2_slab2DK1Slab(tile->slab));
+        printf("%*d ",2,tile->slab);
+        //printf("%c ",dk2_slab2char(tile->slab));
     }
     printf("\n");
   }
-  return ERR_NONE;
+
+
+  // Writing the map on same file name
+  result=user_save_map(lvl,0);
+  if (result!=ERR_NONE)
+  {
+    printf("cannot save map\n");
+    printf("example1 finished with error\n");
+    system("pause");	
+
+    // The following two commands should be used to free memory
+    // allocated for level
+    level_free(lvl);
+    level_deinit(&lvl);
+
+    // This command should be always last function used from library
+    free_messages();
+    return 1;
+  }
+  printf("map \"%s\" saved\n", get_lvl_savfname(lvl));
+  printf("example1 finished successfully\n");
+  system("pause");	
+
+  // The following two commands should be used to free memory
+  // allocated for level
+  level_free(lvl);
+  level_deinit(&lvl);
+
+  // This command should be always last function used from library
+  free_messages();
+  return 0;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
+
+
 
 /*
  * Prints all the level information.
@@ -1408,7 +1666,7 @@ short dk2m_read_mapfiles(struct DK2_Level *lvl,const char *name,short flags)
       result=dk2m_read_chunkedfile(lvl,fname,dk2m_read_kwdchunk,flags);
   }
   int i;
-  int currpath_len = filename_from_path(name)-name;
+  int currpath_len = filename_from_path2(name)-name;
   if ((currpath_len<0)||(currpath_len>strlen(name)))
     currpath_len=0;
   for (i=0;i<lvl->filepaths_count;i++)
@@ -1418,7 +1676,7 @@ short dk2m_read_mapfiles(struct DK2_Level *lvl,const char *name,short flags)
       strncpy(fname,name,currpath_len);
       fname[currpath_len]=0;
       char *origname=lvl->filepaths[i]->str;
-      char *onlyname=filename_from_path(origname);
+      char *onlyname=filename_from_path2(origname);
       unsigned int dirlevel=str_chrnum(origname,'\\')+str_chrnum(origname,'/');
       while (dirlevel<3)
       {

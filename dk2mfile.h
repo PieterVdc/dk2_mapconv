@@ -23,7 +23,6 @@
 #define DK2MFLAG_VERBOSE        0x01
 #define DK2MFLAG_IGNORE_BADHDR  0x40
 
-#define ERR_NONE                0x00
 
 struct DK2M_Chunk {
     unsigned int id;
@@ -256,5 +255,7 @@ short dk2m_lvl_create(struct DK2_Level **lvl,short flags);
 short dk2m_lvl_free(struct DK2_Level **lvl,short flags);
 
 short dk2m_read_mapfiles(struct DK2_Level *lvl,const char *name,short flags);
+
+short dk2m_print_level(const struct DK2_Level *lvl);
 
 #endif
