@@ -83,7 +83,7 @@ STRIP              = strip --strip-all
 all: make-directories pre-build $(SRC) $(BIN) post-build
 
 make-directories:
-	$(MKDIR) ../lib bin obj
+	$(MKDIR) ../lib bin obj pkg
 
 create-package: fill-pkg-directory
 
