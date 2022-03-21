@@ -1,0 +1,36 @@
+# Project: dk2mtool
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = dk2mtool.o lbfileio.o dk2mfile.o $(RES)
+LINKOBJ  = dk2mtool.o lbfileio.o dk2mfile.o $(RES)
+LIBS =  -L"D:/ProgsNT/Dev-Cpp/lib"  
+INCS =  -I"D:/ProgsNT/Dev-Cpp/include" 
+CXXINCS =  -I"D:/ProgsNT/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"D:/ProgsNT/Dev-Cpp/include/c++/3.4.2/backward"  -I"D:/ProgsNT/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"D:/ProgsNT/Dev-Cpp/include/c++/3.4.2"  -I"D:/ProgsNT/Dev-Cpp/include" 
+BIN  = dk2mtool.exe
+CXXFLAGS = $(CXXINCS)  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before dk2mtool.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CC) $(LINKOBJ) -o "dk2mtool.exe" $(LIBS)
+
+dk2mtool.o: dk2mtool.c
+	$(CC) -c dk2mtool.c -o dk2mtool.o $(CFLAGS)
+
+lbfileio.o: lbfileio.c
+	$(CC) -c lbfileio.c -o lbfileio.o $(CFLAGS)
+
+dk2mfile.o: dk2mfile.c
+	$(CC) -c dk2mfile.c -o dk2mfile.o $(CFLAGS)
