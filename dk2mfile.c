@@ -295,38 +295,56 @@ char dk2_slab2char(unsigned short slab)
   else
        return slab;
 }
+/*
+#define PLAYER0                0x00
+#define PLAYER1                0x01
+#define PLAYER2                0x02
+#define PLAYER3                0x03
+#define PLAYER_GOOD            0x04
+#define PLAYER_UNSET           0x05
+*/
+char dk2_owner2DK1owner(unsigned short dk2owner)
+{
+  switch (dk2owner)
+  {
+  case 1:
+    return PLAYER_GOOD;
+  case 2:
+    return PLAYER_UNSET;
+    break;
+  case 3:
+    return PLAYER0;
+    break;
+  case 4:
+    return PLAYER1;
+    break;
+  case 5:
+    return PLAYER2;
+    break;
+  case 6:
+    return PLAYER3;
+    break;
+
+  default:
+  printf("invalid owner: %d\n",dk2owner);
+    return PLAYER_UNSET;
+
+  }
+}
 
 char dk2_slab2DK1Slab(unsigned short slab)
 {
 
   
 /*
-#define SLAB_TYPE_ROCK         0x00
-#define SLAB_TYPE_GOLD         0x01
-#define SLAB_TYPE_EARTH        0x02
+unused slabs
 #define SLAB_TYPE_TORCHDIRT    0x03
 #define SLAB_TYPE_WALLDRAPE    0x04
 #define SLAB_TYPE_WALLTORCH    0x05
 #define SLAB_TYPE_WALLWTWINS   0x06
 #define SLAB_TYPE_WALLWWOMAN   0x07
 #define SLAB_TYPE_WALLPAIRSHR  0x08
-#define SLAB_TYPE_PATH         0x0a
-#define SLAB_TYPE_CLAIMED      0x0b
-#define SLAB_TYPE_LAVA         0x0c
-#define SLAB_TYPE_WATER        0x0d
-#define SLAB_TYPE_PORTAL       0x0e
-#define SLAB_TYPE_TREASURE     0x10
-#define SLAB_TYPE_LIBRARY      0x12
-#define SLAB_TYPE_PRISONCASE   0x14
-#define SLAB_TYPE_TORTURE      0x16
-#define SLAB_TYPE_TRAINING     0x18
-#define SLAB_TYPE_DUNGHEART    0x1a
-#define SLAB_TYPE_WORKSHOP     0x1c
 #define SLAB_TYPE_SCAVENGER    0x1e
-#define SLAB_TYPE_TEMPLE       0x20
-#define SLAB_TYPE_GRAVEYARD    0x22
-#define SLAB_TYPE_HATCHERY     0x24
-#define SLAB_TYPE_LAIR         0x26
 #define SLAB_TYPE_BARRACKS     0x28
 #define SLAB_TYPE_DOORWOOD1    0x2a
 #define SLAB_TYPE_DOORWOOD2    0x2b
@@ -336,9 +354,6 @@ char dk2_slab2DK1Slab(unsigned short slab)
 #define SLAB_TYPE_DOORIRON2    0x2f
 #define SLAB_TYPE_DOORMAGIC1   0x30
 #define SLAB_TYPE_DOORMAGIC2   0x31
-#define SLAB_TYPE_BRIDGE       0x33
-#define SLAB_TYPE_GEMS         0x34
-#define SLAB_TYPE_GUARDPOST    0x35
 */
 
 
@@ -889,8 +904,9 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
     {
         struct DK2_LvlTile *tile;
         tile=&(lvlDk2->tiles[tile_x][tile_y]);
+        set_tile_owner(lvl,tile_y,tile_x,dk2_owner2DK1owner(tile->owner));
         user_set_slab(lvl,tile_y,tile_x,dk2_slab2DK1Slab(tile->slab));
-        printf("%*d ",2,tile->slab);
+        printf("%*d ",2,tile->owner);
         //printf("%c ",dk2_slab2char(tile->slab));
     }
     printf("\n");
