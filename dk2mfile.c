@@ -838,62 +838,43 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  struct LEVEL *lvl;
-  short result;
+    struct LEVEL *lvl;
 
   // create object for storing map
-  level_init(&lvl,MFV_DKGOLD,NULL);
 
-  // Initialize the message displaying and storing
-  // (we won't use them in this example,
-  // but still they have to be initialized)
-  init_messages();
-
-  printf("\nexample1: how to put gems on map\n\n");
+    init_messages();
+    set_msglog_fname("aaa.log");
+    //there's a bug in adikted when using non square maps, so for now make it a square
+    int size = max(lvlDk2->width,lvlDk2->height);
+    struct UPOINT_3D mapsize={size,size,1};
+    level_init(&(lvl),MFV_DKXPAND,&mapsize);
+  //level_init(&lvl,MFV_DKGOLD,NULL);
+    
 
   // Setting file name of the map to load
-  format_lvl_fname(lvl,"Levels/MAP00001");
+  
 
-  printf("loading map file\n");
 
-  // Loading map
-  result=user_load_map(lvl,0);
-  if (result!=ERR_NONE)
-  {
-    printf("cannot load map\n");
-    printf("example1 finished with error\n");
-    system("pause");	
+  printf("Free\n");
+  //free_map(lvl);
+  printf("starting new map file\n");
 
-    // The following two commands should be used to free memory
-    // allocated for level
-    level_free(lvl);
-    level_deinit(&lvl);
+  start_new_map(lvl);
 
-    // This command should be always last function used from library
-    free_messages();
-    return 1;
-  }
+  format_lvl_fname(lvl,"levels/map00001");
 
   // Making modifications
+
+    lvl->savfname="levels/map00001";
+
+    char str[SIZEOF_DK2_LongStr+1];
+    dk2m_wtos(str,lvlDk2->props.name);
+    set_lif_name_text(lvl,str);
+    lvl->info.author_text = lvlDk2->props.author;
+    lvl->info.desc_text = lvlDk2->props.desc;
+
+
   printf("changing slab\n");
-
-
-
-
 
   printf("DK2_LvlTiles, %dx%d\n",lvlDk2->width,lvlDk2->height);
   int tile_y,tile_x;
@@ -905,6 +886,7 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
         struct DK2_LvlTile *tile;
         tile=&(lvlDk2->tiles[tile_x][tile_y]);
         set_tile_owner(lvl,tile_y,tile_x,dk2_owner2DK1owner(tile->owner));
+            
         user_set_slab(lvl,tile_y,tile_x,dk2_slab2DK1Slab(tile->slab));
         printf("%*d ",2,tile->owner);
         //printf("%c ",dk2_slab2char(tile->slab));
@@ -913,8 +895,11 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
   }
 
 
+
+
+
   // Writing the map on same file name
-  result=user_save_map(lvl,0);
+  short result=user_save_map(lvl,0);
   if (result!=ERR_NONE)
   {
     printf("cannot save map\n");
@@ -942,20 +927,6 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
   // This command should be always last function used from library
   free_messages();
   return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
