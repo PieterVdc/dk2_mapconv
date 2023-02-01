@@ -22,6 +22,8 @@
 #include <string.h>
 #include <stdarg.h>
 #include "lbfileio.h"
+#include "things.h"
+
 
 #include "../ADiKtEd/libadikted/adikted.h"
 
@@ -326,7 +328,7 @@ char dk2_owner2DK1owner(unsigned short dk2owner)
     break;
 
   default:
-  printf("invalid owner: %d\n",dk2owner);
+  //printf("invalid owner: %d\n",dk2owner);
     return PLAYER_UNSET;
 
   }
@@ -836,75 +838,101 @@ short dk2m_print_lvlkwd(const struct DK2_Level *lvl)
 short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
 {
 
-
-
     struct LEVEL *lvl;
 
-  // create object for storing map
+    // create object for storing map
 
     init_messages();
-    set_msglog_fname("aaa.log");
-    //there's a bug in adikted when using non square maps, so for now make it a square
-    int size = max(lvlDk2->width,lvlDk2->height);
-    struct UPOINT_3D mapsize={size,size,1};
-    level_init(&(lvl),MFV_DKXPAND,&mapsize);
-  //level_init(&lvl,MFV_DKGOLD,NULL);
-    
+    // set_msglog_fname("adikted.log");
+    // there's a bug in adikted when using non square maps, so for now make it a square
+    int size = max(lvlDk2->width, lvlDk2->height);
+    struct UPOINT_3D mapsize = {size, size, 1};
+    // struct UPOINT_3D mapsize={lvlDk2->width,lvlDk2->height,1};
+    level_init(&(lvl), MFV_DKXPAND, &mapsize);
+    // level_init(&lvl,MFV_DKGOLD,NULL);
 
-  // Setting file name of the map to load
-  
+    // Setting file name of the map to load
 
+    printf("Free\n");
+    // free_map(lvl);
+    printf("starting new map file\n");
 
-  printf("Free\n");
-  //free_map(lvl);
-  printf("starting new map file\n");
+    start_new_map(lvl);
 
-  start_new_map(lvl);
+    format_lvl_fname(lvl, "levels/map00001");
 
-  format_lvl_fname(lvl,"levels/map00001");
+    // Making modifications
 
-  // Making modifications
+    lvl->savfname = "levels/map00001";
 
-    lvl->savfname="levels/map00001";
-
-    char str[SIZEOF_DK2_LongStr+1];
-    dk2m_wtos(str,lvlDk2->props.name);
-    set_lif_name_text(lvl,str);
+    char str[SIZEOF_DK2_LongStr + 1];
+    dk2m_wtos(str, lvlDk2->props.name);
+    set_lif_name_text(lvl, str);
     lvl->info.author_text = lvlDk2->props.author;
     lvl->info.desc_text = lvlDk2->props.desc;
 
+    printf("changing slab\n");
 
-  printf("changing slab\n");
+    printf("DK2_LvlTiles, %dx%d\n", lvlDk2->width, lvlDk2->height);
 
-  printf("DK2_LvlTiles, %dx%d\n",lvlDk2->width,lvlDk2->height);
-  int tile_y,tile_x;
-  for (tile_x=0;tile_x<lvlDk2->height;tile_x++)
-  {
-    printf(" ");
-    for (tile_y=0;tile_y<lvlDk2->width;tile_y++)
+    //initialise everything with rock
+    for (int tile_y = 0; tile_y < lvl->tlsize.y; tile_y++)
     {
-        struct DK2_LvlTile *tile;
-        tile=&(lvlDk2->tiles[tile_x][tile_y]);
-        set_tile_owner(lvl,tile_y,tile_x,dk2_owner2DK1owner(tile->owner));
-            
-        user_set_slab(lvl,tile_y,tile_x,dk2_slab2DK1Slab(tile->slab));
-        printf("%*d ",2,tile->owner);
-        //printf("%c ",dk2_slab2char(tile->slab));
+        for (int tile_x = 0; tile_x < lvl->tlsize.x; tile_x++)
+        {
+          user_set_slab(lvl, tile_x, tile_y, SLAB_TYPE_ROCK);
+        }
     }
-    printf("\n");
-  }
+
+    //since adikted requires maps to be square, at least center them on said map
+    int start_x = 0;
+    if (size == lvlDk2->width)
+        start_x = 0;
+    else
+        start_x = lvlDk2->width/2 - size/2;
+        
+    int start_y;
+    if (size == lvlDk2->height)
+        start_y = 0;
+    else
+        start_y = lvlDk2->height/2 - size/2;
 
 
+    for (int tile_y = start_y; tile_y < lvlDk2->height; tile_y++)
+    {
+        printf(" ");
+        for (int tile_x = start_x; tile_x < lvlDk2->width; tile_x++)
+        {
+          struct DK2_LvlTile *tile;
+          tile = &(lvlDk2->tiles[tile_y][tile_x]);
+          set_tile_owner(lvl, start_x + tile_x, start_y + tile_y, dk2_owner2DK1owner(tile->owner));
+          user_set_slab(lvl, start_x + tile_x, start_y + tile_y, dk2_slab2DK1Slab(tile->slab));
+          //printf("%*d ", 3, tile->owner);
+          printf("%c ",dk2_slab2char(tile->slab));
+        }
+        printf("\n");
+    }
 
+    // Writing the map on same file name
+    short result = user_save_map(lvl, 0);
+    if (result != ERR_NONE)
+    {
+        printf("cannot save map\n");
+        printf("example1 finished with error\n");
+        system("pause");
 
+        // The following two commands should be used to free memory
+        // allocated for level
+        level_free(lvl);
+        level_deinit(&lvl);
 
-  // Writing the map on same file name
-  short result=user_save_map(lvl,0);
-  if (result!=ERR_NONE)
-  {
-    printf("cannot save map\n");
-    printf("example1 finished with error\n");
-    system("pause");	
+        // This command should be always last function used from library
+        free_messages();
+        return 1;
+    }
+    printf("map \"%s\" saved\n", get_lvl_savfname(lvl));
+    printf("example1 finished successfully\n");
+    system("pause");
 
     // The following two commands should be used to free memory
     // allocated for level
@@ -913,24 +941,7 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
 
     // This command should be always last function used from library
     free_messages();
-    return 1;
-  }
-  printf("map \"%s\" saved\n", get_lvl_savfname(lvl));
-  printf("example1 finished successfully\n");
-  system("pause");	
-
-  // The following two commands should be used to free memory
-  // allocated for level
-  level_free(lvl);
-  level_deinit(&lvl);
-
-  // This command should be always last function used from library
-  free_messages();
-  return 0;
-
-
-
-
+    return 0;
 }
 
 
@@ -1269,25 +1280,6 @@ short dk2m_read_mapchunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,sh
       return ERR_NONE;
   default:
       dk2m_ferror("Unknown MAP chunk type %04x",chunk->id);
-      return -1;
-  }
-}
-
-short dk2m_read_thingschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags)
-{
-  //dk2m_print_chunk(chunk);
-  switch (chunk->id)
-  {
-  case CTTNG_FILEHEAD:
-      return ERR_NONE;
-//      return dk2m_read_xxx(lvl,chunk,flags);
-  case CTTNG_LEVTHINGS:
-      return ERR_NONE;
-  case CTTNG_FILESIZE:
-      // Skip the file size chunk - we don't need it
-      return ERR_NONE;
-  default:
-      dk2m_ferror("Unknown THINGS chunk type %04x",chunk->id);
       return -1;
   }
 }

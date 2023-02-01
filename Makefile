@@ -69,6 +69,7 @@ LIBS               = -L. -L../ADiKtEd/libadikted/bin -ladikted
 SRC                = \
  dk2mtool.c \
  dk2mfile.c \
+ things.c \
  lbfileio.c
 OBJ                = $(addprefix obj/,$(SRC:.c=.o))
 BIN                = bin/dk2mconv$(EXEEXT)
