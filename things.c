@@ -327,6 +327,74 @@ struct keeperCreature {
 	unsigned char playerId;
 } ;
 
+int dk2creaturemodel_to_dk1creaturemodel(int model)
+{
+    switch (model)
+    {
+    case 1: //Imp
+        return CREATR_SUBTP_IMP;
+    case 2: //Goblin
+        return CREATR_SUBTP_ORC;
+    case 3: //Warlock
+        return CREATR_SUBTP_WARLOCK;
+    case 4: //FireFly
+        return CREATR_SUBTP_FLY;
+    case 5: //Troll
+        return CREATR_SUBTP_TROLL;
+    case 6: //DarkElf
+        return CREATR_SUBTP_SPAWN;
+    case 7: //Skeleton
+        return CREATR_SUBTP_SKELETON;
+    case 8: //Dark Mistress
+        return CREATR_SUBTP_MISTRESS;
+    case 9: //Salamander
+        return CREATR_SUBTP_DRAGON;
+    case 10: //Rogue
+        return CREATR_SUBTP_BEETLE;
+    case 11: //Bile demon
+        return CREATR_SUBTP_BILEDEMN;
+    case 12: //Vampire
+        return CREATR_SUBTP_VAMPIRE;
+    case 13: //Dark Knight
+        return CREATR_SUBTP_GHOST;
+    case 14: //Dark Angel
+        return CREATR_SUBTP_HOUND;
+    case 15: //Maiden
+        return CREATR_SUBTP_SPIDER;
+    case 16: //Horny
+        return CREATR_SUBTP_HORNY;
+
+    case 17: //Dwarf
+        return CREATR_SUBTP_TUNELER;
+    case 18: //Knight
+        return CREATR_SUBTP_KNIGHT;
+    case 19: //Thief
+        return CREATR_SUBTP_THEFT;
+    case 20: //Guard
+        return CREATR_SUBTP_BARBARIN;
+    case 21: //Wizard
+        return CREATR_SUBTP_WIZRD;
+    case 22: //Giant
+        return CREATR_SUBTP_GIANT;
+    case 23: //Elven Archer
+        return CREATR_SUBTP_ARCHER;
+    case 24: //Monk
+        return CREATR_SUBTP_MONK;
+    case 25: //Fairy
+        return CREATR_SUBTP_FAIRY;
+    case 26: //King Reginald
+        return CREATR_SUBTP_AVATAR;
+    case 27: //Prince Felix
+        return CREATR_SUBTP_DWAFT;
+    case 28: //Prince Balder
+        return CREATR_SUBTP_WITCH;
+    case 29: //Prince Tristan
+        return CREATR_SUBTP_SMURI;
+    default:
+        break;
+    }
+}
+
 void print_thingtype(int type)
 {
     switch (type)
