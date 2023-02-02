@@ -333,62 +333,66 @@ int dk2creaturemodel_to_dk1creaturemodel(int model)
     {
     case 1: //Imp
         return CREATR_SUBTP_IMP;
-    case 2: //Goblin
+    case 7: //Goblin
         return CREATR_SUBTP_ORC;
-    case 3: //Warlock
+    case 5: //Warlock
         return CREATR_SUBTP_WARLOCK;
-    case 4: //FireFly
+    case 12: //FireFly
         return CREATR_SUBTP_FLY;
-    case 5: //Troll
+    case 10: //Troll
         return CREATR_SUBTP_TROLL;
     case 6: //DarkElf
         return CREATR_SUBTP_SPAWN;
-    case 7: //Skeleton
+    case 9: //Skeleton
         return CREATR_SUBTP_SKELETON;
-    case 8: //Dark Mistress
+    case 4: //Dark Mistress
         return CREATR_SUBTP_MISTRESS;
-    case 9: //Salamander
+    case 11: //Salamander
         return CREATR_SUBTP_DRAGON;
-    case 10: //Rogue
+    case 24: //Rogue
         return CREATR_SUBTP_BEETLE;
-    case 11: //Bile demon
+    case 3: //Bile demon
         return CREATR_SUBTP_BILEDEMN;
-    case 12: //Vampire
+    case 8: //Vampire
         return CREATR_SUBTP_VAMPIRE;
-    case 13: //Dark Knight
+    case 22: //Dark Knight
         return CREATR_SUBTP_GHOST;
-    case 14: //Dark Angel
+    case 23: //Dark Angel
         return CREATR_SUBTP_HOUND;
-    case 15: //Maiden
+    case 27: //Maiden
         return CREATR_SUBTP_SPIDER;
-    case 16: //Horny
+    case 45: //Horny
         return CREATR_SUBTP_HORNY;
 
-    case 17: //Dwarf
+    case 14: //Dwarf
         return CREATR_SUBTP_TUNELER;
-    case 18: //Knight
+    case 13: //Knight
         return CREATR_SUBTP_KNIGHT;
-    case 19: //Thief
+    case 18: //Thief
         return CREATR_SUBTP_THEFT;
-    case 20: //Guard
+    case 25: //Guard
         return CREATR_SUBTP_BARBARIN;
-    case 21: //Wizard
+    case 16: //Wizard
         return CREATR_SUBTP_WIZRD;
-    case 22: //Giant
+    case 15: //Giant
         return CREATR_SUBTP_GIANT;
-    case 23: //Elven Archer
+    case 17: //Elven Archer
         return CREATR_SUBTP_ARCHER;
-    case 24: //Monk
+    case 19: //Monk
         return CREATR_SUBTP_MONK;
-    case 25: //Fairy
+    case 20: //Fairy
         return CREATR_SUBTP_FAIRY;
-    case 26: //King Reginald
-        return CREATR_SUBTP_AVATAR;
-    case 27: //Prince Felix
-        return CREATR_SUBTP_DWAFT;
-    case 28: //Prince Balder
+    case 30: //Royal Guard
+        return CREATR_SUBTP_TENTCL;
+    case 28: //Stone Knight
         return CREATR_SUBTP_WITCH;
-    case 29: //Prince Tristan
+    case 29: //Lord Of The Land
+        return CREATR_SUBTP_DWAFT;
+    case 21: //King Reginald
+        return CREATR_SUBTP_AVATAR;
+    case 2: //Prince Felix
+    case 26: //Prince Balder
+    case 31: //Prince Tristan
         return CREATR_SUBTP_SMURI;
     default:
         break;
@@ -468,14 +472,15 @@ short dk2m_read_things(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,shor
         crt.posY = read_int32_le_buf(chunk->data+offs+12);
         crt.posZ = read_int32_le_buf(chunk->data+offs+16);
         crt.goldHeld = read_int16_le_buf(chunk->data+offs+20);
-        crt.creatureFlag = read_int8_buf(chunk->data+offs+22);
-        crt.initialHealth = read_int16_le_buf(chunk->data+offs+23);
-        crt.objectiveTargetPlayerId = read_int32_le_buf(chunk->data+offs+27);
-        crt.triggerId = read_int16_le_buf(chunk->data+offs+31);
-        crt.creatureId = read_int8_buf(chunk->data+offs+33);
-        crt.playerId = read_int8_buf(chunk->data+offs+34);
+        crt.level = read_int8_buf(chunk->data+offs+23);
+        crt.creatureFlag = read_int8_buf(chunk->data+offs+23);
+        crt.initialHealth = read_int32_le_buf(chunk->data+offs+24);
+        crt.objectiveTargetPlayerId = read_int32_le_buf(chunk->data+offs+28);
+        crt.triggerId = read_int16_le_buf(chunk->data+offs+32);
+        crt.creatureId = read_int8_buf(chunk->data+offs+34);
+        crt.playerId = read_int8_buf(chunk->data+offs+35);
 
-        printf("    %d %d %d Id:%d plr:%d \n",crt.posX,crt.posY,crt.posY,crt.creatureId,crt.playerId);
+        printf("    %d %d %d Id:%d plr:%d \n",crt.posX,crt.posY,crt.posZ,crt.creatureId,crt.playerId);
 
 
       }

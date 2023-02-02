@@ -889,19 +889,19 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
     if (size == lvlDk2->width)
         start_x = 0;
     else
-        start_x = lvlDk2->width/2 - size/2;
+        start_x = size/2 - lvlDk2->width/2;
         
     int start_y;
     if (size == lvlDk2->height)
         start_y = 0;
     else
-        start_y = lvlDk2->height/2 - size/2;
+        start_y = size/2 - lvlDk2->height/2;
 
 
-    for (int tile_y = start_y; tile_y < lvlDk2->height; tile_y++)
+    for (int tile_y = 0; tile_y < lvlDk2->height; tile_y++)
     {
         printf(" ");
-        for (int tile_x = start_x; tile_x < lvlDk2->width; tile_x++)
+        for (int tile_x = 0; tile_x < lvlDk2->width; tile_x++)
         {
           struct DK2_LvlTile *tile;
           tile = &(lvlDk2->tiles[tile_y][tile_x]);
