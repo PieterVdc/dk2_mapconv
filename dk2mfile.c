@@ -913,6 +913,8 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
         printf("\n");
     }
 
+    dk2m_print_things(lvlDk2,lvl);
+
     // Writing the map on same file name
     short result = user_save_map(lvl, 0);
     if (result != ERR_NONE)
@@ -932,7 +934,7 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
     }
     printf("map \"%s\" saved\n", get_lvl_savfname(lvl));
     printf("example1 finished successfully\n");
-    system("pause");
+    //system("pause");
 
     // The following two commands should be used to free memory
     // allocated for level

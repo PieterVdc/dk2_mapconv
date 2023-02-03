@@ -151,183 +151,150 @@ struct GoodCreature {
 	unsigned char unk_1[2];
 	struct CreatureBehaviourFlag2 creatureFlag2;
 };
-/*
-typedef struct ThingData {
+
+struct ThingData {
 	enum ThingType type;
 	unsigned int dataSize;
-	switch (type) {
-		case OBJECT_THING:
-			struct {
-				int posX;
-				int posY;
-				unsigned char unk_1[4];
-				int keeperSpellId;
-				int moneyAmount;
-				unsigned short triggerId;
-				unsigned char objectId;
-				unsigned char playerId;
-			} objectThing;
-			break;
-		case TRAP_THING:
-			struct {
-				int posX;
-				int posY;
-				int unk_1;
-				unsigned char numberOfShots;
-				unsigned char trapId;
-				unsigned char playerId;
-				unsigned char unk_2;
-			} trapThing;
-			break;
-		case DOOR_THING:
-			struct {
-				int posX;
-				int posY;
-				int unk_1;
-				unsigned short triggerId;
-				unsigned char doorId;
-				unsigned char playerId;
-				DoorAppearanceFlag doorFlag;
-				unsigned char unk_2[3];
-			} trapThing;
-			break;
-		case ACTIONPOINT_THING:
-			struct {
-				int startX;
-				int startY;
-				int endX;
-				int endY;
-				unsigned short waitDelay;
-				ActionPointFlag flags;
-				unsigned short triggerId;
-				unsigned char id;
-				unsigned char nextWaypointId;
-				char name[32];
-			} actionPointThing;
-			break;
-		case NEUTRAL_CREATURE_THING:
-			struct {
-				int posX;
-				int posY;
-				int posZ;
-				unsigned short goldHeld;
-				unsigned char level;
-				CreatureBehaviourFlag creatureFlag;
-				int initialHealth;
-				unsigned short triggerId;
-				unsigned char creatureId;
-				unsigned char unk_1;
-			} neutralCreatureThing;
-			break;
-		case GOOD_CREATURE_THING:
-			GoodCreature goodCreature;
-			break;
-		case CREATURE_THING:
-			struct {
-				int posX;
-				int posY;
-				int posZ;
-				unsigned short goldHeld;
-				unsigned char level;
-				CreatureBehaviourFlag creatureFlag;
-				int initialHealth;
-				int objectiveTargetPlayerId;
-				unsigned short triggerId;
-				unsigned char creatureId;
-				unsigned char playerId;
-			} keeperCreature;
-			break;
-		case HEROPARTY_THING:
-			struct {
-				char name[32];
-				unsigned short triggerId;
-				unsigned char id;
-				int unk_1; // x23
-				int unk_2; // x27
-				GoodCreature partyMembers[16];
-			} heroParty;
-			break;
-		case DEAD_BODY_THING:
-			struct {
-				int posX;
-				int posY;
-				int posZ;
-				unsigned short goldHeld;
-				unsigned char creatureId;
-				unsigned char playerId;
-			} deadCreature;
-			break;
-		case EFFECT_GENERATOR_THING:
-			struct {
-				int posX;
-				int posY;
-				int unk_1; // x08
-				int unk_2; // x0c
-				unsigned short unk_3; // x10
-				unsigned short unk_4; // x12
-				unsigned short effectIds[4];
-				unsigned char frequency;
-				unsigned char id;
-				unsigned char pad[6];
-			} effectGenerator;
-			break;
-		case ROOM_THING:
-			struct {
-				int posX;
-				int posY;
-				int unk_1; // x08
-				short unk_2; // x0c
-				Direction dir;
-				unsigned char unk_3; // x0f
-				unsigned short initialHealth;
-				RoomType type;
-				unsigned char playerId;
-			} room;
-			break;
-		case CAMERA_THING:
-			struct {
-				Vector3f position;
-				Vector3f positionMinClipExtent;
-				Vector3f positionMaxClipExtent;
-				float32 viewDistanceValue;
-				float32 viewDistanceMin;
-				float32 viewDistanceMax;
-				float32 zoomValue;
-				float32 zoomValueMin;
-				float32 zoomValueMax;
-				float32 lensValue;
-				float32 lensValueMin;
-				float32 lensValueMax;
-				CameraFlag flag;
-				unsigned short angleYaw; // angleXY ?
-				unsigned short angleRoll; // angleYZ ?
-				unsigned short anglePitch; // angleXZ ?
-				unsigned short id;
-			} camera;
-			break;
-		default:
-            showError("ThingType", type, type);
-			unsigned char unknownData[dataSize]<optimize=false>;
-	}
-	
+	union {
+		struct {
+			int posX;
+			int posY;
+			unsigned char unk_1[4];
+			int keeperSpellId;
+			int moneyAmount;
+			unsigned short triggerId;
+			unsigned char objectId;
+			unsigned char playerId;
+		} objectThing;
+        
+		struct {
+			int posX;
+			int posY;
+			int unk_1;
+			unsigned char numberOfShots;
+			unsigned char trapId;
+			unsigned char playerId;
+			unsigned char unk_2;
+		} trapThing;
+		struct {
+			int posX;
+			int posY;
+			int unk_1;
+			unsigned short triggerId;
+			unsigned char doorId;
+			unsigned char playerId;
+			enum DoorAppearanceFlag doorFlag;
+			unsigned char unk_2[3];
+		} doorThing;
+		struct {
+			int startX;
+			int startY;
+			int endX;
+			int endY;
+			unsigned short waitDelay;
+			struct ActionPointFlag flags;
+			unsigned short triggerId;
+			unsigned char id;
+			unsigned char nextWaypointId;
+			char name[32];
+		} actionPointThing;
+		struct {
+			int posX;
+			int posY;
+			int posZ;
+			unsigned short goldHeld;
+			unsigned char level;
+			unsigned char creatureFlag;
+			int initialHealth;
+			unsigned short triggerId;
+			unsigned char creatureId;
+			unsigned char unk_1;
+		} neutralCreatureThing;
+		struct {
+			int posX;
+			int posY;
+			int posZ;
+			unsigned short goldHeld;
+			unsigned char level;
+			unsigned char creatureFlag;
+			int initialHealth;
+			int objectiveTargetPlayerId;
+			unsigned short triggerId;
+			unsigned char creatureId;
+			unsigned char playerId;
+		} keeperCreature;
+		struct {
+			char name[32];
+			unsigned short triggerId;
+			unsigned char id;
+			int unk_1; // x23
+			int unk_2; // x27
+			struct GoodCreature partyMembers[16];
+		} heroParty;
+		struct {
+			int posX;
+			int posY;
+			int posZ;
+			unsigned short goldHeld;
+			unsigned char creatureId;
+			unsigned char playerId;
+		} deadCreature;
+		struct {
+			int posX;
+			int posY;
+			int unk_1; // x08
+			int unk_2; // x0c
+			unsigned short unk_3; // x10
+			unsigned short unk_4; // x12
+			unsigned short effectIds[4];
+			unsigned char frequency;
+			unsigned char id;
+			unsigned char pad[6];
+		} effectGenerator;
+		struct {
+			int posX;
+			int posY;
+			int unk_1; // x08
+			short unk_2; // x0c
+		//	struct Direction dir;
+			unsigned char unk_3; // x0f
+			unsigned short initialHealth;
+			enum RoomType type;
+			unsigned char playerId;
+		} room;
+		struct {
+		//	struct Vector3f position;
+		//	struct Vector3f positionMinClipExtent;
+		//	struct Vector3f positionMaxClipExtent;
+			float viewDistanceValue;
+			float viewDistanceMin;
+			float viewDistanceMax;
+			float zoomValue;
+			float zoomValueMin;
+			float zoomValueMax;
+			float lensValue;
+			float lensValueMin;
+			float lensValueMax;
+			struct CameraFlag flag;
+			unsigned short angleYaw; // angleXY ?
+			unsigned short angleRoll; // angleYZ ?
+			unsigned short anglePitch; // angleXZ ?
+			unsigned short id;
+		} camera;
+	};
 };
-*/
 
-struct keeperCreature {
-	int posX;
-	int posY;
-	int posZ;
-	unsigned short goldHeld;
-	unsigned char level;
-	unsigned char creatureFlag;
-	int initialHealth;
-	int objectiveTargetPlayerId;
-	unsigned short triggerId;
-	unsigned char creatureId;
-	unsigned char playerId;
-} ;
 
-int dk2creaturemodel_to_dk1creaturemodel(int model)
+
+
+/**********/
+
+
+struct ThingData thingdatas[2048];
+
+
+/**********/
+int dk2_to_dk1creaturemodel(int model)
 {
     switch (model)
     {
@@ -395,7 +362,82 @@ int dk2creaturemodel_to_dk1creaturemodel(int model)
     case 31: //Prince Tristan
         return CREATR_SUBTP_SMURI;
     default:
-        break;
+        printf("unexpected creature %d", model);
+        return 0;
+    }
+}
+
+char* creaturemodel_to_string(int model)
+{
+    switch (model)
+    {
+    case 1: //Imp
+        return "imp";
+    case 7: //Goblin
+        return "Goblin";
+    case 5: //Warlock
+        return "Warlock";
+    case 12: //FireFly
+        return "FireFly";
+    case 10: //Troll
+        return "Troll";
+    case 6: //DarkElf
+        return "DarkElf";
+    case 9: //Skeleton
+        return "Skeleton";
+    case 4: //Dark Mistress
+        return "Dark Mistress";
+    case 11: //Salamander
+        return "Salamander";
+    case 24: //Rogue
+        return "Rogue";
+    case 3: //Bile demon
+        return "Bile demon";
+    case 8: //Vampire
+        return "Vampire";
+    case 22: //Dark Knight
+        return "Dark Knight";
+    case 23: //Dark Angel
+        return "Dark Angel";
+    case 27: //Maiden
+        return "Maiden";
+    case 45: //Horny
+        return "Horny";
+
+    case 14: //Dwarf
+        return "Dwarf";
+    case 13: //Knight
+        return "Knight";
+    case 18: //Thief
+        return "Thief";
+    case 25: //Guard
+        return "Guard";
+    case 16: //Wizard
+        return "Wizard";
+    case 15: //Giant
+        return "Giant";
+    case 17: //Elven Archer
+        return "Elven Archer";
+    case 19: //Monk
+        return "Monk";
+    case 20: //Fairy
+        return "Fairy";
+    case 30: //Royal Guard
+        return "Royal Guard";
+    case 28: //Stone Knight
+        return "Stone Knight";
+    case 29: //Lord Of The Land
+        return "Lord Of The Land";
+    case 21: //King Reginald
+        return "King Reginald";
+    case 2: //Prince Felix
+        return "Prince Felix";
+    case 26: //Prince Balder
+        return "Prince Balder";
+    case 31: //Prince Tristan
+        return "Prince Tristan";
+    default:
+        return "Unknown creature";
     }
 }
 
@@ -454,39 +496,56 @@ short dk2m_read_things_header(struct DK2_Level *lvl,const struct DK2M_Chunk *chu
 short dk2m_read_things(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags)
 {
   unsigned long offs=0;
-  
-    unsigned int type;
-    unsigned int dataSize;
-    
+      
   for (int i=0;i<count;i++)
   {
-      type     = read_int32_le_buf(chunk->data+offs+0);
-      dataSize = read_int32_le_buf(chunk->data+offs+4);
+      thingdatas[i].type     = read_int32_le_buf(chunk->data+offs+0);
+      thingdatas[i].dataSize = read_int32_le_buf(chunk->data+offs+4);
 
-      print_thingtype(type);
-
-      if (type == CREATURE_THING)
+    switch (thingdatas[i].type)
+    {
+    case OBJECT_THING:
+    case TRAP_THING:
+    case DOOR_THING:
+    case ACTIONPOINT_THING:
+        break;
+    case NEUTRAL_CREATURE_THING:
+    case GOOD_CREATURE_THING:
+    case CREATURE_THING:
+        thingdatas[i].keeperCreature.posX = read_int32_le_buf(chunk->data+offs+8);
+        thingdatas[i].keeperCreature.posY = read_int32_le_buf(chunk->data+offs+12);
+        thingdatas[i].keeperCreature.posZ = read_int32_le_buf(chunk->data+offs+16);
+        thingdatas[i].keeperCreature.goldHeld = read_int16_le_buf(chunk->data+offs+20);
+        thingdatas[i].keeperCreature.level = read_int8_buf(chunk->data+offs+22);
+        thingdatas[i].keeperCreature.creatureFlag = read_int8_buf(chunk->data+offs+23);
+        thingdatas[i].keeperCreature.initialHealth = read_int32_le_buf(chunk->data+offs+24);
+        thingdatas[i].keeperCreature.objectiveTargetPlayerId = read_int32_le_buf(chunk->data+offs+28);
+        thingdatas[i].keeperCreature.triggerId = read_int16_le_buf(chunk->data+offs+32);
+        thingdatas[i].keeperCreature.creatureId = read_int8_buf(chunk->data+offs+34);
+        thingdatas[i].keeperCreature.playerId = read_int8_buf(chunk->data+offs+35);
+        break;
+    case HEROPARTY_THING:
+    case DEAD_BODY_THING:
+    case EFFECT_GENERATOR_THING:
+    case ROOM_THING:
+    case CAMERA_THING:
+        break;
+    
+    default:
+        printf("unknown ThingType %d", thingdatas[i].type);
+        break;
+    }
+      if (thingdatas[i].type == CREATURE_THING)
       {
-        struct keeperCreature crt;
-        crt.posX = read_int32_le_buf(chunk->data+offs+8);
-        crt.posY = read_int32_le_buf(chunk->data+offs+12);
-        crt.posZ = read_int32_le_buf(chunk->data+offs+16);
-        crt.goldHeld = read_int16_le_buf(chunk->data+offs+20);
-        crt.level = read_int8_buf(chunk->data+offs+23);
-        crt.creatureFlag = read_int8_buf(chunk->data+offs+23);
-        crt.initialHealth = read_int32_le_buf(chunk->data+offs+24);
-        crt.objectiveTargetPlayerId = read_int32_le_buf(chunk->data+offs+28);
-        crt.triggerId = read_int16_le_buf(chunk->data+offs+32);
-        crt.creatureId = read_int8_buf(chunk->data+offs+34);
-        crt.playerId = read_int8_buf(chunk->data+offs+35);
+        
 
-        printf("    %d %d %d Id:%d plr:%d \n",crt.posX,crt.posY,crt.posZ,crt.creatureId,crt.playerId);
 
+        //printf("    %d %d %d Id:%d plr:%d \n",crt.posX,crt.posY,crt.posZ,crt.creatureId,crt.playerId);
 
       }
 
       offs+=8;
-      offs+=dataSize;
+      offs+=thingdatas[i].dataSize;
       
   }
 
@@ -513,5 +572,51 @@ short dk2m_read_thingschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk
       dk2m_ferror("Unknown THINGS chunk type %04x",chunk->id);
       return -1;
   }
+}
+
+short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl)
+{
+    for (size_t i = 0; i < count; i++)
+    {
+        unsigned char *thing;
+        switch (thingdatas[i].type)
+        {
+        case OBJECT_THING:
+        case TRAP_THING:
+        case DOOR_THING:
+        case ACTIONPOINT_THING:
+            break;
+        case NEUTRAL_CREATURE_THING:
+        case GOOD_CREATURE_THING:
+        case CREATURE_THING:
+            thing = create_thing(thingdatas[i].keeperCreature.posX * 3 + 1,thingdatas[i].keeperCreature.posY * 3 + 1);
+            set_thing_type(thing,THING_TYPE_CREATURE);
+            set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].keeperCreature.creatureId));
+            set_thing_owner(thing,dk2_owner2DK1owner(thingdatas[i].keeperCreature.playerId));
+            set_thing_level(thing,thingdatas[i].keeperCreature.level);
+            thing_add(lvl,thing);
+            printf(" lvl:%d %s owner:%d\n",
+                   thingdatas[i].keeperCreature.level,
+                   creaturemodel_to_string(thingdatas[i].keeperCreature.creatureId),
+                   thingdatas[i].keeperCreature.playerId);
+
+            break;
+        case HEROPARTY_THING:
+        case DEAD_BODY_THING:
+        case EFFECT_GENERATOR_THING:
+        case ROOM_THING:
+        case CAMERA_THING:
+            break;
+        
+        default:
+            printf("unknown ThingType %d\n", thingdatas[i].type);
+            break;
+        }
+    }
+    
+ 
+
+
+   
 }
 

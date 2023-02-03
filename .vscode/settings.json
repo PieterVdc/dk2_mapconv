@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "adikted.h": "c",
+        "lev_things.h": "c",
+        "things.h": "c",
+        "dk2mfile.h": "c"
+    }
+}

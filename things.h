@@ -19,7 +19,9 @@
 #define THINGS_H
 
 #include "dk2mfile.h"
+#include "../ADiKtEd/libadikted/adikted.h"
 
 short dk2m_read_thingschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags);
+short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl);
 
 #endif
