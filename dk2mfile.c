@@ -835,7 +835,7 @@ short dk2m_print_lvlkwd(const struct DK2_Level *lvl)
 /*
  * Prints the level information normally stored in MAP file.
  */
-short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
+short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2,char *outputmapname)
 {
 
     struct LEVEL *lvl;
@@ -859,11 +859,11 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
 
     start_new_map(lvl);
 
-    format_lvl_fname(lvl, "levels/map00001");
+    format_lvl_fname(lvl, outputmapname);
 
     // Making modifications
 
-    lvl->savfname = "levels/map00001";
+    lvl->savfname = outputmapname;
 
     char str[SIZEOF_DK2_LongStr + 1];
     dk2m_wtos(str, lvlDk2->props.name);
@@ -885,17 +885,17 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
     }
 
     //since adikted requires maps to be square, at least center them on said map
-    int start_x = 0;
+    int offset_x = 0;
     if (size == lvlDk2->width)
-        start_x = 0;
+        offset_x = 0;
     else
-        start_x = size/2 - lvlDk2->width/2;
+        offset_x = size/2 - lvlDk2->width/2;
         
-    int start_y;
+    int offset_y;
     if (size == lvlDk2->height)
-        start_y = 0;
+        offset_y = 0;
     else
-        start_y = size/2 - lvlDk2->height/2;
+        offset_y = size/2 - lvlDk2->height/2;
 
 
     for (int tile_y = 0; tile_y < lvlDk2->height; tile_y++)
@@ -905,22 +905,22 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
         {
           struct DK2_LvlTile *tile;
           tile = &(lvlDk2->tiles[tile_y][tile_x]);
-          set_tile_owner(lvl, start_x + tile_x, start_y + tile_y, dk2_owner2DK1owner(tile->owner));
-          user_set_slab(lvl, start_x + tile_x, start_y + tile_y, dk2_slab2DK1Slab(tile->slab));
+          set_tile_owner(lvl, offset_x + tile_x, offset_y + tile_y, dk2_owner2DK1owner(tile->owner));
+          user_set_slab(lvl, offset_x + tile_x, offset_y + tile_y, dk2_slab2DK1Slab(tile->slab));
           //printf("%*d ", 3, tile->owner);
           printf("%c ",dk2_slab2char(tile->slab));
         }
         printf("\n");
     }
 
-    dk2m_print_things(lvlDk2,lvl);
+    dk2m_print_things(lvlDk2,lvl,offset_x,offset_y);
 
     // Writing the map on same file name
     short result = user_save_map(lvl, 0);
     if (result != ERR_NONE)
     {
         printf("cannot save map\n");
-        printf("example1 finished with error\n");
+        printf("finished with error\n");
         system("pause");
 
         // The following two commands should be used to free memory
@@ -933,7 +933,7 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
         return 1;
     }
     printf("map \"%s\" saved\n", get_lvl_savfname(lvl));
-    printf("example1 finished successfully\n");
+    printf("finished successfully\n");
     //system("pause");
 
     // The following two commands should be used to free memory
@@ -951,13 +951,13 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2)
 /*
  * Prints all the level information.
  */
-short dk2m_print_level(const struct DK2_Level *lvl)
+short dk2m_print_level(const struct DK2_Level *lvl,char *outputmapname)
 {
   short result=ERR_NONE;
   if (result==ERR_NONE)
       result=dk2m_print_lvlkwd(lvl);
   if (result==ERR_NONE)
-      result=dk2m_print_lvlmap(lvl);
+      result=dk2m_print_lvlmap(lvl,outputmapname);
   return result;
 }
 

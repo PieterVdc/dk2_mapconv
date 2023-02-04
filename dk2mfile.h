@@ -256,7 +256,7 @@ short dk2m_lvl_free(struct DK2_Level **lvl,short flags);
 
 short dk2m_read_mapfiles(struct DK2_Level *lvl,const char *name,short flags);
 
-short dk2m_print_level(const struct DK2_Level *lvl);
+short dk2m_print_level(const struct DK2_Level *lvl,char *outputmapname);
 
 char dk2_owner2DK1owner(unsigned short dk2owner);
 

@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 {
     printf("\nDungeon Keeper 2 map tool\n");
     printf("-------------------------------\n");
-    if ((argc<3)||(strlen(argv[2])!=1))
+    if ((argc<3)||(strlen(argv[3])!=1))
     {
         printf("Not enought parameters.\n");
         printf("Usage:\n");
@@ -47,7 +47,8 @@ int main(int argc, char *argv[])
   struct DK2_Level *lvl;
   short flags = DK2MFLAG_VERBOSE;
   char *map_name=argv[1];
-  char operatn=argv[2][0];
+  char *outputmap=argv[2];
+  char operatn=argv[3][0];
   short result;
   result=dk2m_lvl_create(&lvl,flags);
   if (result!=ERR_NONE)
@@ -63,9 +64,10 @@ int main(int argc, char *argv[])
   }
   switch (operatn)
   {
+  case 'c':
   case 'd':
     {
-      dk2m_print_level(lvl);
+      dk2m_print_level(lvl,outputmap);
     };break;
   default:
       printf("Unknown opertation symbol.\n");
