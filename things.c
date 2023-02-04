@@ -618,8 +618,8 @@ short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl,int off
         case DOOR_THING:
         case ACTIONPOINT_THING:
             break;
-        case NEUTRAL_CREATURE_THING:
-            thing = create_thing(thingdatas[i].neutralCreatureThing.posX * 3 + 1 + offset_x,thingdatas[i].neutralCreatureThing.posY * 3 + 1 + offset_y);
+        case NEUTRAL_CREATURE_THING: 
+            thing = create_thing(thingdatas[i].neutralCreatureThing.posX * 3 + 1 + offset_x * 3,thingdatas[i].neutralCreatureThing.posY * 3 + 1 + (offset_y * 3));
             set_thing_type(thing,THING_TYPE_CREATURE);
             set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].neutralCreatureThing.creatureId));
             set_thing_owner(thing,PLAYER_UNSET);
@@ -631,7 +631,7 @@ short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl,int off
 
             break;
         case GOOD_CREATURE_THING:
-            thing = create_thing(thingdatas[i].goodCreature.posX * 3 + 1 + offset_x,thingdatas[i].goodCreature.posY * 3 + 1 + offset_y);
+            thing = create_thing(thingdatas[i].goodCreature.posX * 3 + 1 + offset_x * 3,thingdatas[i].goodCreature.posY * 3 + 1 + offset_y * 3);
             set_thing_type(thing,THING_TYPE_CREATURE);
             set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].goodCreature.creatureId));
             set_thing_owner(thing,PLAYER_GOOD);
@@ -643,7 +643,7 @@ short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl,int off
 
             break;
         case CREATURE_THING:
-            thing = create_thing(thingdatas[i].keeperCreature.posX * 3 + 1 + offset_x,thingdatas[i].keeperCreature.posY * 3 + 1 + offset_y);
+            thing = create_thing(thingdatas[i].keeperCreature.posX * 3 + 1 + offset_x * 3,thingdatas[i].keeperCreature.posY * 3 + 1 + offset_y * 3);
             set_thing_type(thing,THING_TYPE_CREATURE);
             set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].keeperCreature.creatureId));
             set_thing_owner(thing,dk2_owner2DK1owner(thingdatas[i].keeperCreature.playerId));
