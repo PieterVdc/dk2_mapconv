@@ -223,6 +223,22 @@ struct ThingData {
 			unsigned char creatureId;
 			unsigned char playerId;
 		} keeperCreature;
+        struct {
+            int posX;
+            int posY;
+            int posZ;
+            unsigned short goldHeld;
+            unsigned char level;
+            unsigned char creatureFlag;
+            int objectiveTargetActionPointId;
+            int initialHealth;
+            unsigned short triggerId;
+            unsigned char objectiveTargetPlayerId;
+            enum Objective objective;
+            unsigned char creatureId;
+            unsigned char unk_1[2];
+            struct CreatureBehaviourFlag2 creatureFlag2;
+        }goodCreature;
 		struct {
 			char name[32];
 			unsigned short triggerId;
@@ -495,59 +511,75 @@ short dk2m_read_things_header(struct DK2_Level *lvl,const struct DK2M_Chunk *chu
 
 short dk2m_read_things(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags)
 {
-  unsigned long offs=0;
-      
-  for (int i=0;i<count;i++)
-  {
-      thingdatas[i].type     = read_int32_le_buf(chunk->data+offs+0);
-      thingdatas[i].dataSize = read_int32_le_buf(chunk->data+offs+4);
+    unsigned long offs = 0;
 
-    switch (thingdatas[i].type)
+    for (int i = 0; i < count; i++)
     {
-    case OBJECT_THING:
-    case TRAP_THING:
-    case DOOR_THING:
-    case ACTIONPOINT_THING:
-        break;
-    case NEUTRAL_CREATURE_THING:
-    case GOOD_CREATURE_THING:
-    case CREATURE_THING:
-        thingdatas[i].keeperCreature.posX = read_int32_le_buf(chunk->data+offs+8);
-        thingdatas[i].keeperCreature.posY = read_int32_le_buf(chunk->data+offs+12);
-        thingdatas[i].keeperCreature.posZ = read_int32_le_buf(chunk->data+offs+16);
-        thingdatas[i].keeperCreature.goldHeld = read_int16_le_buf(chunk->data+offs+20);
-        thingdatas[i].keeperCreature.level = read_int8_buf(chunk->data+offs+22);
-        thingdatas[i].keeperCreature.creatureFlag = read_int8_buf(chunk->data+offs+23);
-        thingdatas[i].keeperCreature.initialHealth = read_int32_le_buf(chunk->data+offs+24);
-        thingdatas[i].keeperCreature.objectiveTargetPlayerId = read_int32_le_buf(chunk->data+offs+28);
-        thingdatas[i].keeperCreature.triggerId = read_int16_le_buf(chunk->data+offs+32);
-        thingdatas[i].keeperCreature.creatureId = read_int8_buf(chunk->data+offs+34);
-        thingdatas[i].keeperCreature.playerId = read_int8_buf(chunk->data+offs+35);
-        break;
-    case HEROPARTY_THING:
-    case DEAD_BODY_THING:
-    case EFFECT_GENERATOR_THING:
-    case ROOM_THING:
-    case CAMERA_THING:
-        break;
-    
-    default:
-        printf("unknown ThingType %d", thingdatas[i].type);
-        break;
+        thingdatas[i].type = read_int32_le_buf(chunk->data + offs + 0);
+        thingdatas[i].dataSize = read_int32_le_buf(chunk->data + offs + 4);
+
+        switch (thingdatas[i].type)
+        {
+        case OBJECT_THING:
+        case TRAP_THING:
+        case DOOR_THING:
+        case ACTIONPOINT_THING:
+            break;
+        case NEUTRAL_CREATURE_THING:
+            thingdatas[i].neutralCreatureThing.posX = read_int32_le_buf(chunk->data + offs + 8);
+            thingdatas[i].neutralCreatureThing.posY = read_int32_le_buf(chunk->data + offs + 12);
+            thingdatas[i].neutralCreatureThing.posZ = read_int32_le_buf(chunk->data + offs + 16);
+            thingdatas[i].neutralCreatureThing.goldHeld = read_int16_le_buf(chunk->data + offs + 20);
+            thingdatas[i].neutralCreatureThing.level = read_int8_buf(chunk->data + offs + 22);
+            thingdatas[i].neutralCreatureThing.creatureFlag = read_int8_buf(chunk->data + offs + 23);
+            thingdatas[i].neutralCreatureThing.initialHealth = read_int32_le_buf(chunk->data + offs + 24);
+            thingdatas[i].neutralCreatureThing.triggerId = read_int16_le_buf(chunk->data + offs + 28);
+            thingdatas[i].neutralCreatureThing.creatureId = read_int8_buf(chunk->data + offs + 30);
+            thingdatas[i].neutralCreatureThing.unk_1 = read_int8_buf(chunk->data + offs + 31);
+        case GOOD_CREATURE_THING:
+            thingdatas[i].goodCreature.posX = read_int32_le_buf(chunk->data + offs + 8);
+            thingdatas[i].goodCreature.posY = read_int32_le_buf(chunk->data + offs + 12);
+            thingdatas[i].goodCreature.posZ = read_int32_le_buf(chunk->data + offs + 16);
+            thingdatas[i].goodCreature.goldHeld = read_int16_le_buf(chunk->data + offs + 20);
+            thingdatas[i].goodCreature.level = read_int8_buf(chunk->data + offs + 22);
+            thingdatas[i].goodCreature.creatureFlag = read_int8_buf(chunk->data + offs + 23);
+            thingdatas[i].goodCreature.objectiveTargetActionPointId = read_int32_le_buf(chunk->data + offs + 24);
+            thingdatas[i].goodCreature.initialHealth = read_int32_le_buf(chunk->data + offs + 28);
+            thingdatas[i].goodCreature.triggerId = read_int16_le_buf(chunk->data + offs + 32);
+            thingdatas[i].goodCreature.objectiveTargetPlayerId = read_int8_buf(chunk->data + offs + 34);
+            thingdatas[i].goodCreature.objective = read_int8_buf(chunk->data + offs + 35);
+            thingdatas[i].goodCreature.creatureId = read_int8_buf(chunk->data + offs + 36);
+            thingdatas[i].goodCreature.unk_1[0] = read_int8_buf(chunk->data + offs + 37);
+            thingdatas[i].goodCreature.unk_1[1] = read_int8_buf(chunk->data + offs + 38);
+            //thingdatas[i].goodCreature.creatureFlag2 = read_int8_buf(chunk->data + offs + 39);
+        case CREATURE_THING:
+            thingdatas[i].keeperCreature.posX = read_int32_le_buf(chunk->data + offs + 8);
+            thingdatas[i].keeperCreature.posY = read_int32_le_buf(chunk->data + offs + 12);
+            thingdatas[i].keeperCreature.posZ = read_int32_le_buf(chunk->data + offs + 16);
+            thingdatas[i].keeperCreature.goldHeld = read_int16_le_buf(chunk->data + offs + 20);
+            thingdatas[i].keeperCreature.level = read_int8_buf(chunk->data + offs + 22);
+            thingdatas[i].keeperCreature.creatureFlag = read_int8_buf(chunk->data + offs + 23);
+            thingdatas[i].keeperCreature.initialHealth = read_int32_le_buf(chunk->data + offs + 24);
+            thingdatas[i].keeperCreature.objectiveTargetPlayerId = read_int32_le_buf(chunk->data + offs + 28);
+            thingdatas[i].keeperCreature.triggerId = read_int16_le_buf(chunk->data + offs + 32);
+            thingdatas[i].keeperCreature.creatureId = read_int8_buf(chunk->data + offs + 34);
+            thingdatas[i].keeperCreature.playerId = read_int8_buf(chunk->data + offs + 35);
+            break;
+        case HEROPARTY_THING:
+        case DEAD_BODY_THING:
+        case EFFECT_GENERATOR_THING:
+        case ROOM_THING:
+        case CAMERA_THING:
+            break;
+
+        default:
+            printf("unknown ThingType %d", thingdatas[i].type);
+            break;
+        }
+
+        offs += 8;
+        offs += thingdatas[i].dataSize;
     }
-      if (thingdatas[i].type == CREATURE_THING)
-      {
-        
-
-
-        //printf("    %d %d %d Id:%d plr:%d \n",crt.posX,crt.posY,crt.posZ,crt.creatureId,crt.playerId);
-
-      }
-
-      offs+=8;
-      offs+=thingdatas[i].dataSize;
-      
-  }
 
   //if (chunk->dsize != (total_tiles<<2))
   //    return -1;
@@ -587,13 +619,35 @@ short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl)
         case ACTIONPOINT_THING:
             break;
         case NEUTRAL_CREATURE_THING:
+            thing = create_thing(thingdatas[i].neutralCreatureThing.posX * 3 + 1,thingdatas[i].neutralCreatureThing.posY * 3 + 1);
+            set_thing_type(thing,THING_TYPE_CREATURE);
+            set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].neutralCreatureThing.creatureId));
+            set_thing_owner(thing,PLAYER_UNSET);
+            set_thing_level(thing,thingdatas[i].neutralCreatureThing.level - 1);
+            thing_add(lvl,thing);
+            printf(" lvl:%d %s owner:Neutral\n",
+                   thingdatas[i].neutralCreatureThing.level,
+                   creaturemodel_to_string(thingdatas[i].neutralCreatureThing.creatureId));
+
+            break;
         case GOOD_CREATURE_THING:
+            thing = create_thing(thingdatas[i].goodCreature.posX * 3 + 1,thingdatas[i].goodCreature.posY * 3 + 1);
+            set_thing_type(thing,THING_TYPE_CREATURE);
+            set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].goodCreature.creatureId));
+            set_thing_owner(thing,PLAYER_GOOD);
+            set_thing_level(thing,thingdatas[i].goodCreature.level - 1);
+            thing_add(lvl,thing);
+            printf(" lvl:%d %s owner:hero\n",
+                   thingdatas[i].goodCreature.level,
+                   creaturemodel_to_string(thingdatas[i].goodCreature.creatureId));
+
+            break;
         case CREATURE_THING:
             thing = create_thing(thingdatas[i].keeperCreature.posX * 3 + 1,thingdatas[i].keeperCreature.posY * 3 + 1);
             set_thing_type(thing,THING_TYPE_CREATURE);
             set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].keeperCreature.creatureId));
             set_thing_owner(thing,dk2_owner2DK1owner(thingdatas[i].keeperCreature.playerId));
-            set_thing_level(thing,thingdatas[i].keeperCreature.level);
+            set_thing_level(thing,thingdatas[i].keeperCreature.level - 1);
             thing_add(lvl,thing);
             printf(" lvl:%d %s owner:%d\n",
                    thingdatas[i].keeperCreature.level,
