@@ -23,6 +23,7 @@
 #include <stdarg.h>
 #include "lbfileio.h"
 #include "things.h"
+#include "script.h"
 
 
 #include "../ADiKtEd/libadikted/adikted.h"
@@ -447,12 +448,6 @@ default:
   return SLAB_TYPE_PURPLE_PATH;
   break;
 }
-
-
-
-
-
-
 
 
 }
@@ -913,7 +908,12 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2,char *outputmapname)
         printf("\n");
     }
 
+
+
+
+
     dk2m_print_things(lvlDk2,lvl,offset_x,offset_y);
+    dk2m_print_script(lvlDk2,lvl);
 
     // Writing the map on same file name
     short result = user_save_map(lvl, 0);
@@ -1377,46 +1377,6 @@ short dk2m_read_playerschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chun
       return ERR_NONE;
   default:
       dk2m_ferror("Unknown PLAYERS chunk type %04x",chunk->id);
-      return -1;
-  }
-}
-
-short dk2m_read_variableschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags)
-{
-  //dk2m_print_chunk(chunk);
-  switch (chunk->id)
-  {
-/*
-//TODO: make cases for all chunks
-  case CTxxx_:
-      return ERR_NONE;
-//      return dk2m_read_xxx(lvl,chunk,flags);
-  case CTxxx_FILESIZE:
-      // Skip the file size chunk - we don't need it
-      return ERR_NONE;
-*/
-  default:
-      return ERR_NONE; //no error message - not all chunks supported
-      dk2m_ferror("Unknown VARIABLES chunk type %04x",chunk->id);
-      return -1;
-  }
-}
-
-short dk2m_read_triggerschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags)
-{
-  //dk2m_print_chunk(chunk);
-  switch (chunk->id)
-  {
-  case CTTRG_TRGRSDATA:
-      return ERR_NONE;
-//      return dk2m_read_xxx(lvl,chunk,flags);
-//TODO: make cases for all chunks
-  case CTTRG_FILESIZE:
-      // Skip the file size chunk - we don't need it
-      return ERR_NONE;
-  default:
-      return ERR_NONE; //no error message - not all chunks supported
-      dk2m_ferror("Unknown TRIGGERS chunk type %04x",chunk->id);
       return -1;
   }
 }

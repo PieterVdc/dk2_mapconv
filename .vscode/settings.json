@@ -3,6 +3,11 @@
         "adikted.h": "c",
         "lev_things.h": "c",
         "things.h": "c",
-        "dk2mfile.h": "c"
+        "dk2mfile.h": "c",
+        "algorithm": "c",
+        "xmemory": "c",
+        "xutility": "c",
+        "initializer_list": "c",
+        "type_traits": "c"
     }
 }

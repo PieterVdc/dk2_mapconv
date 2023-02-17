@@ -94,7 +94,8 @@ enum DK2M_ChunkType {
 
         CTTRG_FILESIZE           = 0x00d2,
 //        CTTRG_                   = 0x00d3,
-        CTTRG_TRGRSDATA          = 0x0002,
+        CTTRG_TRGRSDATA          = 212,
+        CTTRG_TRGRSHEADER         = 211,
 };
 
 /*

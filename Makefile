@@ -70,6 +70,7 @@ SRC                = \
  dk2mtool.c \
  dk2mfile.c \
  things.c \
+ script.c \
  lbfileio.c
 OBJ                = $(addprefix obj/,$(SRC:.c=.o))
 BIN                = bin/dk2mconv$(EXEEXT)

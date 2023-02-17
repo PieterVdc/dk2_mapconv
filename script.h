@@ -6,6 +6,7 @@
  * @par Comment:
  *     None.
  * @author   qqluqq
+ * @date     15 Jul 2008 - 05 Aug 2008
  * @par  Copying and copyrights:
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -14,13 +15,14 @@
  */
 /******************************************************************************/
 
-#ifndef THINGS_H
-#define THINGS_H
+#ifndef SCRIPT_H
+#define SCRIPT_H
 
 #include "dk2mfile.h"
 #include "../ADiKtEd/libadikted/adikted.h"
 
-short dk2m_read_thingschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags);
-short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl,int offset_x,int offset_y);
+short dk2m_read_triggerschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags);
+short dk2m_read_variableschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk,short flags);
+short dk2m_print_script(const struct DK2_Level *lvlDk2,struct LEVEL *lvl);
 
 #endif
