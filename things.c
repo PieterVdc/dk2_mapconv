@@ -608,6 +608,8 @@ short dk2m_read_thingschunk(struct DK2_Level *lvl,const struct DK2M_Chunk *chunk
 
 short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl,int offset_x,int offset_y)
 {
+    int x;
+    int y;
     for (size_t i = 0; i < count; i++)
     {
         unsigned char *thing;
@@ -619,36 +621,65 @@ short dk2m_print_things(const struct DK2_Level *lvlDk2,struct LEVEL *lvl,int off
         case ACTIONPOINT_THING:
             break;
         case NEUTRAL_CREATURE_THING: 
-            thing = create_thing(thingdatas[i].neutralCreatureThing.posX * 3 + 1 + offset_x * 3,thingdatas[i].neutralCreatureThing.posY * 3 + 1 + (offset_y * 3));
-            set_thing_type(thing,THING_TYPE_CREATURE);
-            set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].neutralCreatureThing.creatureId));
-            set_thing_owner(thing,PLAYER_UNSET);
-            set_thing_level(thing,thingdatas[i].neutralCreatureThing.level - 1);
-            thing_add(lvl,thing);
+            x = thingdatas[i].neutralCreatureThing.posX * 3 + 1 + offset_x * 3;
+            y = thingdatas[i].neutralCreatureThing.posY * 3 + 1 + (offset_y * 3);
+
+            if (x>255 || y>255)
+            {
+                printf("SCRAPPED_OVERFLOW");
+            }
+            else
+            {
+                thing = create_thing(x,y);
+                set_thing_type(thing,THING_TYPE_CREATURE);
+                set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].neutralCreatureThing.creatureId));
+                set_thing_owner(thing,PLAYER_UNSET);
+                set_thing_level(thing,thingdatas[i].neutralCreatureThing.level - 1);
+                thing_add(lvl,thing);
+            }
+
             printf(" lvl:%d %s owner:Neutral\n",
                    thingdatas[i].neutralCreatureThing.level,
                    creaturemodel_to_string(thingdatas[i].neutralCreatureThing.creatureId));
 
             break;
         case GOOD_CREATURE_THING:
-            thing = create_thing(thingdatas[i].goodCreature.posX * 3 + 1 + offset_x * 3,thingdatas[i].goodCreature.posY * 3 + 1 + offset_y * 3);
-            set_thing_type(thing,THING_TYPE_CREATURE);
-            set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].goodCreature.creatureId));
-            set_thing_owner(thing,PLAYER_GOOD);
-            set_thing_level(thing,thingdatas[i].goodCreature.level - 1);
-            thing_add(lvl,thing);
+            x = thingdatas[i].goodCreature.posX * 3 + 1 + offset_x * 3;
+            y = thingdatas[i].goodCreature.posY * 3 + 1 + offset_y * 3;
+            if (x>255 || y>255)
+            {
+                printf("SCRAPPED_OVERFLOW");
+            }
+            else
+            {
+                thing = create_thing(x,y);
+                set_thing_type(thing,THING_TYPE_CREATURE);
+                set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].goodCreature.creatureId));
+                set_thing_owner(thing,PLAYER_GOOD);
+                set_thing_level(thing,thingdatas[i].goodCreature.level - 1);
+                thing_add(lvl,thing);
+            }
             printf(" lvl:%d %s owner:hero\n",
                    thingdatas[i].goodCreature.level,
                    creaturemodel_to_string(thingdatas[i].goodCreature.creatureId));
 
             break;
         case CREATURE_THING:
-            thing = create_thing(thingdatas[i].keeperCreature.posX * 3 + 1 + offset_x * 3,thingdatas[i].keeperCreature.posY * 3 + 1 + offset_y * 3);
-            set_thing_type(thing,THING_TYPE_CREATURE);
-            set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].keeperCreature.creatureId));
-            set_thing_owner(thing,dk2_owner2DK1owner(thingdatas[i].keeperCreature.playerId));
-            set_thing_level(thing,thingdatas[i].keeperCreature.level - 1);
-            thing_add(lvl,thing);
+            x = thingdatas[i].keeperCreature.posX * 3 + 1 + offset_x * 3;
+            y = thingdatas[i].keeperCreature.posY * 3 + 1 + offset_y * 3;
+            if (x>255 || y>255)
+            {
+                printf("SCRAPPED_OVERFLOW");
+            }
+            else
+            {
+                thing = create_thing(x,y);
+                set_thing_type(thing,THING_TYPE_CREATURE);
+                set_thing_subtype(thing,dk2_to_dk1creaturemodel(thingdatas[i].keeperCreature.creatureId));
+                set_thing_owner(thing,dk2_owner2DK1owner(thingdatas[i].keeperCreature.playerId));
+                set_thing_level(thing,thingdatas[i].keeperCreature.level - 1);
+                thing_add(lvl,thing);
+            }
             printf(" lvl:%d %s owner:%d\n",
                    thingdatas[i].keeperCreature.level,
                    creaturemodel_to_string(thingdatas[i].keeperCreature.creatureId),
