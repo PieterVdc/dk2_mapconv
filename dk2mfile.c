@@ -881,16 +881,16 @@ short dk2m_print_lvlmap(const struct DK2_Level *lvlDk2,char *outputmapname)
 
     //since adikted requires maps to be square, at least center them on said map
     int offset_x = 0;
-    if (size == lvlDk2->width)
+    //if (size == lvlDk2->width)
         offset_x = 0;
-    else
-        offset_x = size/2 - lvlDk2->width/2;
+    //else
+    //    offset_x = size/2 - lvlDk2->width/2;
         
     int offset_y;
-    if (size == lvlDk2->height)
+    //if (size == lvlDk2->height)
         offset_y = 0;
-    else
-        offset_y = size/2 - lvlDk2->height/2;
+    //else
+    //    offset_y = size/2 - lvlDk2->height/2;
 
 
     for (int tile_y = 0; tile_y < lvlDk2->height; tile_y++)
